@@ -2,10 +2,10 @@
 
 set -e
 
-if [ $# -ne 8 ]
+if [ $# -ne 9 ]
 then
-	echo "Usage: $0 <masim dir> <cgroup mount path> <zswap enable> <zswap writeback> <hot data> <warm data> <cold data> <runtime_seconds>"
-	echo "e.g., $0 ../masim/ /sys/fs/cgroup/ Y 0 none none /dev/urandom 60"
+	echo "Usage: $0 <masim dir> <cgroup mount path> <mem.high> <zswap enable> <zswap writeback> <hot data> <warm data> <cold data> <runtime_seconds>"
+	echo "e.g., $0 ../masim/ /sys/fs/cgroup/ 2G Y 0 none none /dev/urandom 60"
 	exit 1
 fi
 
@@ -18,16 +18,17 @@ fi
 bindir=$(dirname "$0")
 masim_dir=$1
 cgroup_dir="${2}/eval_zswap"
-zswap_enabled=$3
-zswap_writeback=$4
-hot_data=$5
-warm_data=$6
-cold_data=$7
-runtime_seconds=$8
+mem_high=$3
+zswap_enabled=$4
+zswap_writeback=$5
+hot_data=$6
+warm_data=$7
+cold_data=$8
+runtime_seconds=$9
 
 mkdir "$cgroup_dir"
 echo $$ > "${cgroup_dir}/cgroup.procs"
-echo 2G > "${cgroup_dir}/memory.high"
+echo "$mem_high" > "${cgroup_dir}/memory.high"
 
 echo "$zswap_enabled" > "/sys/module/zswap/parameters/enabled"
 echo "$zswap_writeback" > "${cgroup_dir}/memory.zswap.writeback"
