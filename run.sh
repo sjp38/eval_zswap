@@ -5,7 +5,7 @@ set -e
 if [ $# -ne 8 ]
 then
 	echo "Usage: $0 <masim dir> <cgroup mount path> <zswap enable> <zswap writeback> <hot data> <warm data> <cold data> <runtime_seconds>"
-	echo "e.g., $0 ../masim/ /sys/fs/cgroup/ Y 0 10 none none /dev/urandom 60"
+	echo "e.g., $0 ../masim/ /sys/fs/cgroup/ Y 0 none none /dev/urandom 60"
 	exit 1
 fi
 
