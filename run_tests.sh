@@ -1,6 +1,6 @@
 #!/bin/bash
 
-log_dir="logs/$(date +%Y-%m-%d-%H-%M-%S)
+log_dir="logs/$(date +%Y-%m-%d-%H-%M-%S)"
 mkdir -p "$log_dir"
 
 echo "no memory pressure"
