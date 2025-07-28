@@ -1,6 +1,13 @@
 #!/bin/bash
 
-log_dir="logs/$(date +%Y-%m-%d-%H-%M-%S)"
+if [ $# -eq 1 ]
+then
+	log_dir=$1
+else
+	log_dir=logs
+fi
+
+log_dir="${log_dir}/$(date +%Y-%m-%d-%H-%M-%S)"
 mkdir -p "$log_dir"
 
 echo "no memory pressure"
