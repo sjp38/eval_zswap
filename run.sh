@@ -44,7 +44,8 @@ echo 3 > /proc/sys/vm/drop_caches
 	--access_pattern one hot 1 4k 70 rw \
 	--access_pattern one warm 1 4k 20 rw \
 	--access_pattern one cold 1 4k 10 rw \
-	--log_interval 5000
+	--log_interval 5000 \
+	--accesses_per_region_selection 1
 
 "$bindir/stat.py" --before_output before_masim
 echo $$ > "${cgroup_dir}/../cgroup.procs"
