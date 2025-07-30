@@ -12,6 +12,8 @@ def main():
 
     stats = {}
     for stat in ['reject_compress_fail', 'reject_compress_poor',
+                 'reject_kmemcache_fail', 'pool_limit_hit', 'reject_alloc_fail',
+                 'decompress_fail', 'pool_total_size',
                  'stored_pages', 'written_back_pages']:
         filepath = os.path.join('/sys/kernel/debug/zswap', stat)
         if not os.path.isfile(filepath):
