@@ -11,27 +11,42 @@ log_dir="${log_dir}/$(date +%Y-%m-%d-%H-%M-%S)"
 mkdir -p "$log_dir"
 
 echo "no memory pressure"
-sudo ./run.sh ../masim /sys/fs/cgroup/ 3G N 1 none none none 120 | tee "$log_dir/0"
-
-echo "zswap disabled"
-sudo ./run.sh ../masim /sys/fs/cgroup/ 2G N 1 none none none 120 | tee "$log_dir/1-1"
-
-echo
-echo "zswap disabled, cold data is incompressbile"
-sudo ./run.sh ../masim /sys/fs/cgroup/ 2G N 1 none none /dev/urandom 120 | tee "$log_dir/1-2"
+sudo ./run.sh ../masim /sys/fs/cgroup/ 2G N N \
+	./compressible_data ./compressible_data /dev/urandom 120 | \
+	tee "$log_dir/0"
 
 echo
-echo "zswap enabled"
-sudo ./run.sh ../masim /sys/fs/cgroup/ 2G Y 1 none none none 120 | tee "$log_dir/2-1"
+echo "zswap disabled, 10 % memory pressure"
+sudo ./run.sh ../masim /sys/fs/cgroup/ 1350M N N \
+	./compressible_data ./compressible_data /dev/urandom 120 | \
+	tee "$log_dir/1-1"
 
 echo
-echo "zswap enabled, cold data is incompressbile"
-sudo ./run.sh ../masim /sys/fs/cgroup/ 2G Y 1 none none /dev/urandom 120 | tee "$log_dir/2-2"
+echo "zswap enabled, 10 % memory pressure"
+sudo ./run.sh ../masim /sys/fs/cgroup/ 1350M Y N \
+	./compressible_data ./compressible_data /dev/urandom 120 | \
+	tee "$log_dir/1-2"
 
 echo
-echo "zswap enabled, writeback disabled"
-sudo ./run.sh ../masim /sys/fs/cgroup/ 2G Y 0 none none none 120 | tee "$log_dir/3-1"
+echo "zswap enabled with keeping incompressible pages, 10 % memory pressure"
+sudo ./run.sh ../masim /sys/fs/cgroup/ 1350M Y Y \
+	./compressible_data ./compressible_data /dev/urandom 120 | \
+	tee "$log_dir/1-3"
 
 echo
-echo "zswap enabled, writeback disabled, cold data is incompressbile"
-sudo ./run.sh ../masim /sys/fs/cgroup/ 2G Y 1 none none /dev/urandom 120 | tee "$log_dir/3-2"
+echo "zswap disabled, 20 % memory pressure"
+sudo ./run.sh ../masim /sys/fs/cgroup/ 1200M N N \
+	./compressible_data ./compressible_data /dev/urandom 120 | \
+	tee "$log_dir/2-1"
+
+echo
+echo "zswap enabled, 20 % memory pressure"
+sudo ./run.sh ../masim /sys/fs/cgroup/ 1200M Y N \
+	./compressible_data ./compressible_data /dev/urandom 120 | \
+	tee "$log_dir/2-2"
+
+echo
+echo "zswap enabled with keeping incompressible pages, 20 % memory pressure"
+sudo ./run.sh ../masim /sys/fs/cgroup/ 1200M Y Y \
+	./compressible_data ./compressible_data /dev/urandom 120 | \
+	tee "$log_dir/2-3"
