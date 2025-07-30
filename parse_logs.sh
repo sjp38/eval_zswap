@@ -20,7 +20,7 @@ do
 		awk '{print $2}' | sed 's/,//g' | "$statof_py" stdev stdin)
 	echo "$file_name"
 	echo "perf: $avg_perf"
-	echo "perf stdev: $stdev"
+	echo "perf_stdev: $stdev"
 	for field in zswpin zswpout zswpwb pswpin pswpout
 	do
 		grep "$field" $f
