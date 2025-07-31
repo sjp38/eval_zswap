@@ -2,10 +2,10 @@
 
 set -e
 
-if [ $# -ne 9 ]
+if [ $# -ne 10 ]
 then
-	echo "Usage: $0 <masim dir> <cgroup mount path> <mem.high> <zswap enable> <save incompressbile pages> <hot data> <warm data> <cold data> <runtime_seconds>"
-	echo "e.g., $0 ../masim/ /sys/fs/cgroup/ 2G Y 0 none none /dev/urandom 60"
+	echo "Usage: $0 <masim dir> <cgroup mount path> <mem.high> <zswap enable> <zswap shrinker enabled> <save incompressbile pages> <hot data> <warm data> <cold data> <runtime_seconds>"
+	echo "e.g., $0 ../masim/ /sys/fs/cgroup/ 2G Y Y Y none none /dev/urandom 60"
 	exit 1
 fi
 
@@ -20,11 +20,12 @@ masim_dir=$1
 cgroup_dir="${2}/eval_zswap"
 mem_high=$3
 zswap_enabled=$4
-zswap_save_incompressible_pages=$5
-first_data=$6
-second_data=$7
-third_data=$8
-runtime_seconds=$9
+zswap_shrnker_enabled=$5
+zswap_save_incompressible_pages=$6
+first_data=$7
+second_data=$8
+third_data=$9
+runtime_seconds=$10
 
 echo N > /sys/module/zswap/parameters/enabled
 swapoff -a
@@ -36,6 +37,7 @@ echo $$ > "${cgroup_dir}/cgroup.procs"
 echo "$mem_high" > "${cgroup_dir}/memory.high"
 
 echo "$zswap_enabled" > "/sys/module/zswap/parameters/enabled"
+echo "$zswap_shrnker_enabled" > "/sys/module/zswap/parameters/shrinker_enabled"
 echo "$zswap_save_incompressible_pages" > "/sys/module/zswap/parameters/save_incompressible_pages"
 
 "$bindir/stat.py" > before_masim
