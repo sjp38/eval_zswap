@@ -25,7 +25,7 @@ zswap_save_incompressible_pages=$6
 first_data=$7
 second_data=$8
 third_data=$9
-runtime_seconds=$10
+runtime_seconds=${10}
 
 echo N > /sys/module/zswap/parameters/enabled
 swapoff -a
