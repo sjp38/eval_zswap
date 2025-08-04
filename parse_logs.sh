@@ -18,12 +18,12 @@ do
 		awk '{print $2}' | sed 's/,//g' | "$statof_py" avg stdin)
 	stdev=$(cat "$f" | grep msec | tail -n "$tail_length" | \
 		awk '{print $2}' | sed 's/,//g' | "$statof_py" stdev stdin)
-	echo "$file_name"
-	echo "perf: $avg_perf"
-	echo "perf_stdev: $stdev"
+	echo "$file_name perf $avg_perf"
+	echo "$file_name perf_stdev: $stdev"
 	for field in zswpin zswpout zswpwb pswpin pswpout
 	do
-		grep "$field" $f
+		val=$(grep "$field" $f | awk '{print $2}')
+		echo "$file_name $field $val"
 	done
 	echo
 done
